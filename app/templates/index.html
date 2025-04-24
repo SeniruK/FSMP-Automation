@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select FSMP year</title>
+    <link rel="stylesheet" href="static/style.css">
+    <link rel="icon" type="images/png" href="../static/img/boeing-symbol.png"/>
+    <script src="static/script.js" defer></script>
+</head>
+<body>
+    <div class="banner">
+        <h1>FSMP Automation</h1>
+        <img src="../static/img/boeing-logo-png-transparent.png" alt="Boeing Logo">
+    </div>    
+    <p>Welcome to the B-1 ASIP FSMP Automation tool! To begin, please select the FSMP year you wish to calculate:</p>
+    <h2>Select FSMP year to pull tables:</h2>
+    <select id="year-select">
+        {% for y in years %}
+            <option value="{{ y }}">{{ y }}</option>
+        {% endfor %}
+    </select>
+    <button onclick="pullTables()">Pull Tables</button>
+
+    <div id="results"></div>
+
+    <div id="table-viewer" style="display:none;">
+        <h2>View Table</h2>
+        <select id="table-select" onchange="viewTable()"></select>
+        <table id="data-table" border="1"></table>
+        <button id="next-button" onclick="goToCalculationPage()">Next</button>
+    </div>
+    
+</body>
+</html>

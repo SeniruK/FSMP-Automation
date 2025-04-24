@@ -1,0 +1,48 @@
+body {
+    background-color: whitesmoke;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+    color: #5f6a72;
+    font-size: 32px;
+    /* line-height: 34px; */
+}
+
+h2 {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #0033a1;
+    font-size: 24px;
+}
+
+p {
+    color: #394a59;
+}
+
+.banner {
+    display: flex;
+    justify-content: space-between;
+    /* padding: 0px 20px; */
+}
+
+.banner img {
+    height: 76.88px;
+    align-self: center;
+}
+
+table {
+    overflow-y: scroll;
+    height: 300px;
+    display: block;
+    border-collapse: collapse;
+ }
+
+th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    text-align: center;
+}
+
+button {
+    margin-top: 20px;
+}

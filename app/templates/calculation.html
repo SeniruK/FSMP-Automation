@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/style.css">
+    <title>FSMP Calculation Results</title>
+</head>
+<body>
+    <h1>FSMP Calculation Results</h1>
+    <p>{{ result.message }}</p>
+    <h2>Table Summary</h2>
+    <ul>
+        {% for name, count in result.summary.items() %}
+            <li>{{ name }}: {{ count }} rows</li>
+        {% endfor %}
+    </ul>
+    <button onclick="window.location.href='/'">Go Back</button>
+</body>
+</html>
