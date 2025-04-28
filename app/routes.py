@@ -3,7 +3,7 @@
 from flask import Blueprint, render_template, request, jsonify, session
 import pandas as pd
 from .database import pull_table_names, get_table_data
-from .calculateFSMP import calculateIATModifiedTotalLife
+from .calculateFSMP import calculateIATModifiedTotalLife, calculateCPDTLife, calculateCPFollowonLife, calculateInspectionIntervals, calculateHoursAtNextInspection, calculateHoursToNextInspection
 
 bp = Blueprint("main", __name__)
 
@@ -37,21 +37,28 @@ def calculate_page():
     if not table_names:
         return "No tables pulled", 400
 
-    dataframes = {}
+    db_dataframes = {}
     for name in table_names:
         data = get_table_data(name, FSMPyear)
         df = pd.DataFrame(data)
-        dataframes[name] = df
-
-    trkpt_list = dataframes[f"IAT_TRKPT_{FSMPyear}"]["TRKPT"].tolist()
-    ctrlpt_list = dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"]["CTRLPT"].tolist()
-    acsn_list = dataframes["AC_Status_List"]["ACSN"].tolist()
+        db_dataframes[name] = df
     
-    dataframes["IAT Modified Total Life"] = calculateIATModifiedTotalLife(FSMPyear, dataframes)
+    fsmp_dataframes = {}
+
+    trkpt_list = db_dataframes[f"IAT_TRKPT_{FSMPyear}"]["TRKPT"].tolist()
+    ctrlpt_list = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"]["CTRLPT"].tolist()
+    acsn_list = db_dataframes["AC_Status_List"]["ACSN"].tolist()
+    
+    fsmp_dataframes["IAT Modified Total Life"] = calculateIATModifiedTotalLife(FSMPyear, db_dataframes)
+    fsmp_dataframes["CP DT Life"] = calculateCPDTLife(FSMPyear, db_dataframes, fsmp_dataframes)
+    fsmp_dataframes["CP Follow-on Life"] = calculateCPFollowonLife(FSMPyear, db_dataframes, fsmp_dataframes)
+    fsmp_dataframes["Inspection Intervals"] = calculateInspectionIntervals(FSMPyear, db_dataframes, fsmp_dataframes)
+    fsmp_dataframes["Hours at Next Inspection"] = calculateHoursAtNextInspection(FSMPyear, db_dataframes, fsmp_dataframes)
+    fsmp_dataframes["Hours to Next Inspection"] = calculateHoursToNextInspection(FSMPyear, db_dataframes, fsmp_dataframes)
 
     result = {
         "message": "Calculation complete!",
-        "summary": {name: len(df) for name, df in dataframes.items()}
+        "summary": {name: len(df) for name, df in fsmp_dataframes.items()}
     }
 
     return render_template("calculation.html", result=result)
