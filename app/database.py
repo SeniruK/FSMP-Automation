@@ -14,7 +14,7 @@ def connect_db():
 def pull_table_names(FSMPyear):
     conn = connect_db()
     cursor = conn.cursor()
-    tables = ["Normalized_Scale_Factors", "AC_Status_List"]
+    tables = []
     for row in cursor.tables(tableType="TABLE"):
         name = row.table_name
         if ("DAMGEFL" in name) and (str(int(FSMPyear)-1) in name):
@@ -23,6 +23,7 @@ def pull_table_names(FSMPyear):
             continue
         elif str(FSMPyear) in name:
             tables.append(name)
+    tables.extend(["Normalized_Scale_Factors", "AC_Status_List"])
     conn.close()
     return {"success": [f"Successfully pulled: {t}" for t in tables], "tables": tables}
 

@@ -13,7 +13,7 @@ Output(s):
 - DataFrame 1: Modified IAT Life
 '''
 
-def calculateIATModifiedTotalLife(FSMPyear, db_dataframes):
+def calculateIATModifiedTotalLife(FSMPyear, db_dataframes, fsmp_dataframes):
     import pandas as pd
     
     IATyear = FSMPyear - 1
