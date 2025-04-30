@@ -73,34 +73,42 @@ function goToCalculationPage() {
 
 async function runAllSteps() {
     const steps = [
-        { label: "IAT Modified Total Life" },
-        { label: "CP DT Life" },
-        { label: "CP Follow-on Life" },
-        { label: "Inspection Intervals" },
-        { label: "Hours at Next Inspection" },
-        { label: "Hours to Next Inspection" }
+        { label: "IAT Modified Total Life", key: "iat_modified_total_life" },
+        { label: "CP DT Life", key: "cp_dt_life" },
+        { label: "CP Follow-on Life", key: "cp_follow_on_life" },
+        { label: "Inspection Intervals", key: "inspection_intervals" },
+        { label: "Hours at Next Inspection", key: "hours_at_next_inspection" },
+        { label: "Hours to Next Inspection", key: "hours_to_next_inspection" }
     ];
 
     const progressDiv = document.getElementById("progress");
     progressDiv.innerHTML = "";
 
-    for (const step in steps) {
+    for (const step of steps) {
         const stepMsg = document.createElement("div")
         stepMsg.innerText = `Calculating: ${step.label}...`;
         progressDiv.appendChild(stepMsg);
 
         try {
-            const res = await fetch(`/run_step/${step.label}`, {
+            const res = await fetch(`/run_step/${step.key}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" }
             });
+
             const data = await res.json();
 
+            if (!res.ok) {
+                step.innerText = `${step.label} failed: ${data.error}`;
+                console.error(`Error: ${data.error}:`);
+                return;
+            }
+
             stepMsg.innerText = data.message || `${step.label} complete!`;
+
         } catch (error) {
             stepMsg.innertext = `${step.label} calculation failed.`;
-            console.error(`Error on ${step.label} calculation`, error);
-            break;
+            console.error(`Network error during ${step.label} calculation`, error);
+            return;
         }
     }
 
@@ -110,44 +118,21 @@ async function runAllSteps() {
     
 }
 
-function viewCalcTable() {
-    const tableName = document.getElementById("calc-table-select").value;
-    if (!tableName) return;
+async function loadTable(tableName) {
+    const viewer = document.getElementById("tableViewer");
+    viewer.innerHTML = "Loading table...";
 
-    fetch("/get_calc_table", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ table_name: tableName})
-    })
-    .then(res => res.json())
-    .then(data => {
-        const table = document.getElementById("calc-data-table");
-        table.innerHTML = "";
+    try {
+        const res = await fetch(`/view_table/${tableName}`);
+        const html = await res.text();
 
-        if (data.length === 0) {
-            table.innerHTML = "<tr><td>No data<td><tr>";
-            return;
+        if (!res.ok) {
+            viewer.innerHTML = `<div style="color:red;">Error: ${html}></div>`;
+        } else {
+            viewer.innerHTML = html;
         }
-
-        // Headers
-        const headers = Object.keys(data[0]);
-        const headerRow = document.createElement("tr");
-        headers.forEach(h => {
-            const th = document.createElement("th");
-            th.textContent = h;
-            headerRow.appendChild(th);            
-        });
-        table.appendChild(headerRow);
-
-        // Rows
-        data.forEach(row => {
-            const tr = document.createElement("tr");
-            headers.forEach(h => {
-                const td = document.createElement("td");
-                td.textContent = row[h];
-                tr.appendChild(td);
-            });
-            table.appendChild(tr);
-        });
-    });
+    } catch (err) {
+        viewer.innerHTML = '<div style="color:red;">Failed to load table.></div>';
+        console.log(err);
+    }
 }

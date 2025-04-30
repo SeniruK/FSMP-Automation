@@ -64,7 +64,7 @@ def calculateCPDTLife(FSMPyear, db_dataframes, fsmp_dataframes):
     import numpy as np
 
     IATyear = FSMPyear - 1
-    df_iat_modified_total_life = fsmp_dataframes["IAT Modified Total Life"]
+    df_iat_modified_total_life = fsmp_dataframes["iat_modified_total_life"]
     df_damagefile = db_dataframes[f"DAMGEFL{IATyear}per2"].set_index(["ACSN", "TRKPT"])
     df_iat_trkpt = db_dataframes[f"IAT_TRKPT_{FSMPyear}"].set_index("TRKPT")
     df_cp_ref = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"].set_index("CTRLPT")
@@ -111,8 +111,8 @@ def calculateCPFollowonLife(FSMPyear, db_dataframes, fsmp_dataframes):
     import numpy as np
 
     IATyear = FSMPyear - 1
-    df_iat_modified_total_life = fsmp_dataframes["IAT Modified Total Life"]
-    df_cp_dt_life = fsmp_dataframes["CP DT Life"]
+    df_iat_modified_total_life = fsmp_dataframes["iat_modified_total_life"]
+    df_cp_dt_life = fsmp_dataframes["cp_dt_life"]
     df_damagefile = db_dataframes[f"DAMGEFL{IATyear}per2"].set_index(["ACSN", "TRKPT"])
     df_iat_trkpt = db_dataframes[f"IAT_TRKPT_{FSMPyear}"].set_index("TRKPT")
     df_cp_ref = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"].set_index("CTRLPT")
@@ -161,8 +161,8 @@ def calculateInspectionIntervals(FSMPyear, db_dataframes, fsmp_dataframes):
     import pandas as pd
 
     IATyear = FSMPyear - 1
-    df_cp_dt_life = fsmp_dataframes["CP DT Life"]
-    df_cp_followon_life = fsmp_dataframes["CP Follow-on Life"]
+    df_cp_dt_life = fsmp_dataframes["cp_dt_life"]
+    df_cp_followon_life = fsmp_dataframes["cp_follow_on_life"]
     df_damagefile = db_dataframes[f"DAMGEFL{IATyear}per2"].set_index(["ACSN", "TRKPT"])
     df_iat_trkpt = db_dataframes[f"IAT_TRKPT_{FSMPyear}"].set_index("TRKPT")
     df_cp_ref = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"].set_index("CTRLPT")
@@ -214,7 +214,7 @@ def calculateHoursAtNextInspection(FSMPyear, db_dataframes, fsmp_dataframes):
     import pandas as pd
 
     IATyear = FSMPyear - 1
-    df_inspection_intervals = fsmp_dataframes["Inspection Intervals"]
+    df_inspection_intervals = fsmp_dataframes["inspection_intervals"]
     df_damagefile = db_dataframes[f"DAMGEFL{IATyear}per2"].set_index(["ACSN", "TRKPT"])
     df_iat_trkpt = db_dataframes[f"IAT_TRKPT_{FSMPyear}"].set_index("TRKPT")
     df_cp_ref = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"].set_index("CTRLPT")
@@ -261,7 +261,7 @@ def calculateHoursToNextInspection(FSMPyear, db_dataframes, fsmp_dataframes):
     import pandas as pd
 
     IATyear = FSMPyear - 1
-    df_hrs_at_next_inspection = fsmp_dataframes["Hours at Next Inspection"]
+    df_hrs_at_next_inspection = fsmp_dataframes["hours_at_next_inspection"]
     df_damagefile = db_dataframes[f"DAMGEFL{IATyear}per2"].set_index(["ACSN", "TRKPT"])
     df_iat_trkpt = db_dataframes[f"IAT_TRKPT_{FSMPyear}"].set_index("TRKPT")
     df_cp_ref = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"].set_index("CTRLPT")

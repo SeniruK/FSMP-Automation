@@ -73,11 +73,13 @@ def show_calculate_page():
 def run_step(calculation_step):
     global calculated_tables
 
-    FSMPyear = int(session.get("FSMPyear"))
+    FSMPyear = session.get("FSMPyear")
     table_names = session.get("table_names")
     
     if not FSMPyear or not table_names:
         return jsonify({"error": "Missing year or table data"}), 400
+    
+    FSMPyear = int(FSMPyear)
 
     db_dataframes = {}
     for name in table_names:
@@ -85,34 +87,31 @@ def run_step(calculation_step):
         df = pd.DataFrame(data)
         db_dataframes[name] = df
     
-    fsmp_dataframes = {}
+    # fsmp_dataframes = {}
     fsmp_functions = {
-        "IAT Modified Total Life": calculateIATModifiedTotalLife,
-        "CP DT Life": calculateCPDTLife,
-        "CP Follow-on Life": calculateCPFollowonLife,
-        "Inspection Intervals": calculateInspectionIntervals,
-        "Hours at Next Inspection": calculateHoursAtNextInspection,
-        "Hours to Next Inspection": calculateHoursToNextInspection
+        "iat_modified_total_life": calculateIATModifiedTotalLife,
+        "cp_dt_life": calculateCPDTLife,
+        "cp_follow_on_life": calculateCPFollowonLife,
+        "inspection_intervals": calculateInspectionIntervals,
+        "hours_at_next_inspection": calculateHoursAtNextInspection,
+        "hours_to_next_inspection": calculateHoursToNextInspection
     }
 
     if calculation_step not in fsmp_functions:
-        return jsonify({"error": "Invalid calculation step"}), 400
+        return jsonify({"error": f"Invalid calculation step: {calculation_step}"}), 400
     
-    fsmp_dataframes[calculation_step] = fsmp_functions[calculation_step](FSMPyear, db_dataframes, fsmp_dataframes)
-    calculated_tables[calculation_step] = fsmp_dataframes[calculation_step]
+    result_df = fsmp_functions[calculation_step](FSMPyear, db_dataframes, calculated_tables)
+    calculated_tables[calculation_step] = result_df
+    # print(calculated_tables[calculation_step])
 
-    return jsonify({"message": f"{calculation_step} complete!"})
+    return jsonify({"message": f"'{calculation_step}' complete!"})
 
-@bp.route("/get_calc_table", methods=["POST"])
-def get_calc_table():
+@bp.route("/view_table/<table_name>")
+def view_table(table_name):
     global calculated_tables
 
-    table_name = request.json["table_name"]
-
-    fsmp_tables = session.get("fsmp_tables", {})
-
-    df = calculated_tables.get(table_name)
-    if df is None:
-        return jsonify([])
+    if table_name not in calculated_tables:
+        return jsonify({"error": f"Table '{table_name}' not found."}), 404
     
-    return jsonify(df.to_dict(orient="records"))
+    df = calculated_tables[table_name]
+    return df.to_html(classes="table table-striped", index=False)

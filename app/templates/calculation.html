@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/style.css">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"> -->
     <script src="static/script.js" defer></script>
     <title>FSMP Calculation Results</title>
 </head>
@@ -12,12 +13,20 @@
     <h2>Press button below to run FSMP calculations:</h2>
     <button onclick="runAllSteps()">Run FSMP Calculations</button>
     <div id="progress"></div>
-    
-    <div id="table-section" style="display:none;">
-        <h2>View FSMP Calculation Tables</h2>
-        <select id="calc-table-select" onchange="viewCalcTable()">
-            <option value="">Select a table</option>
+
+    <div>
+        <label for="tableSelect">View Calculated Table:</label>
+        <select id="tableSelect" onchange="loadTable(this.value)">
+            <option value="iat_modified_total_life">IAT Modified Total Life</option>
+            <option value="cp_dt_life">CP DT Life</option>
+            <option value="cp_follow_on_life">CP Follow-on Life</option>
+            <option value="inspection_intervals">Inspection Intervals</option>
+            <option value="hours_at_next_inspection">Hours at Next Inspection</option>
+            <option value="hours_to_next_inspection">Hours to Next Inspection</option>
+        </select>
     </div>
+
+    <div id="tableViewer" style="margin-top: 20px;"></div>
 
     <button onclick="window.location.href='/'">Go Back</button>
 </body>
