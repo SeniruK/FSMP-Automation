@@ -17,6 +17,7 @@
     <div>
         <label for="tableSelect">View Calculated Table:</label>
         <select id="tableSelect" onchange="loadTable(this.value)">
+            <option value="">--Select a Table--</option>
             <option value="iat_modified_total_life">IAT Modified Total Life</option>
             <option value="cp_dt_life">CP DT Life</option>
             <option value="cp_follow_on_life">CP Follow-on Life</option>
@@ -27,6 +28,9 @@
     </div>
 
     <div id="tableViewer" style="margin-top: 20px;"></div>
+
+    <button onclick="saveExcel()">Download Excel</button>
+    <button onclick="saveCSV()">Download CSVs</button>
 
     <button onclick="window.location.href='/'">Go Back</button>
 </body>

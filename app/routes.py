@@ -1,6 +1,9 @@
 # Routes
 
-from flask import Blueprint, render_template, request, jsonify, session
+from flask import Blueprint, render_template, request, jsonify, session, send_file, current_app
+import zipfile
+import io
+import os
 import pandas as pd
 from .database import pull_table_names, get_table_data
 from .calculateFSMP import calculateIATModifiedTotalLife, calculateCPDTLife, calculateCPFollowonLife, calculateInspectionIntervals, calculateHoursAtNextInspection, calculateHoursToNextInspection
@@ -113,5 +116,43 @@ def view_table(table_name):
     if table_name not in calculated_tables:
         return jsonify({"error": f"Table '{table_name}' not found."}), 404
     
-    df = calculated_tables[table_name]
+    df = calculated_tables[table_name].round(0)
     return df.to_html(classes="table table-striped", index=False)
+
+@bp.route("/save_excel", methods=["POST"])
+def save_excel():
+    global calculated_tables
+    FSMPyear = session["FSMPyear"]
+
+    if not calculated_tables:
+        return "No FSMP calculated tables found", 400
+    
+    output_path = os.path.join(current_app.root_path, "downloads/Excel")
+    os.makedirs(output_path, exist_ok=True)
+
+    file_path = os.path.join(output_path, f"FSMP_Calculations_{FSMPyear}.xlsx")
+
+    with pd.ExcelWriter(file_path, engine="openpyxl") as writer:
+        for name, df in calculated_tables.items():
+            safe_name = name[:31].replace("/", "_")
+            df.set_index("ACSN").to_excel(writer, sheet_name=safe_name, index=True)
+    
+    return f"Saved Excel to {file_path}", 200
+
+@bp.route("/save_csv", methods=["POST"])
+def save_csv():
+    global calculated_tables
+    FSMPyear = session["FSMPyear"]
+
+    if not calculated_tables:
+        return "No FSMP calculated tables found", 400
+    
+    output_path = os.path.join(current_app.root_path, "downloads/CSV")
+    os.makedirs(output_path, exist_ok=True)
+
+    for name, df in calculated_tables.items():
+        safe_name = name[:31].replace("/", "_")
+        file_path = os.path.join(output_path, f"{safe_name}_{FSMPyear}.csv")
+        df.to_csv(file_path, index=False)
+    
+    return f"Saved CSVs to {file_path}", 200

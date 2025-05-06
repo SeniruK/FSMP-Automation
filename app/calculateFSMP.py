@@ -46,7 +46,7 @@ def calculateIATModifiedTotalLife(FSMPyear, db_dataframes, fsmp_dataframes):
                 df_list.append(modified_total_life)
         df_iat_modified_total_life.loc[len(df_iat_modified_total_life)] = df_list
 
-    return df_iat_modified_total_life.set_index("ACSN")
+    return df_iat_modified_total_life
 
 '''
 Function to calculate CP DT Life
@@ -64,7 +64,7 @@ def calculateCPDTLife(FSMPyear, db_dataframes, fsmp_dataframes):
     import numpy as np
 
     IATyear = FSMPyear - 1
-    df_iat_modified_total_life = fsmp_dataframes["iat_modified_total_life"]
+    df_iat_modified_total_life = fsmp_dataframes["iat_modified_total_life"].set_index("ACSN")
     df_damagefile = db_dataframes[f"DAMGEFL{IATyear}per2"].set_index(["ACSN", "TRKPT"])
     df_iat_trkpt = db_dataframes[f"IAT_TRKPT_{FSMPyear}"].set_index("TRKPT")
     df_cp_ref = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"].set_index("CTRLPT")
@@ -92,7 +92,7 @@ def calculateCPDTLife(FSMPyear, db_dataframes, fsmp_dataframes):
                 df_list.append(cp_dt_life)
         df_cp_dt_life.loc[len(df_cp_dt_life)] = df_list
 
-    return df_cp_dt_life.set_index("ACSN")
+    return df_cp_dt_life
 
 '''
 Function to calculate CP Follow-on Lives
@@ -111,8 +111,8 @@ def calculateCPFollowonLife(FSMPyear, db_dataframes, fsmp_dataframes):
     import numpy as np
 
     IATyear = FSMPyear - 1
-    df_iat_modified_total_life = fsmp_dataframes["iat_modified_total_life"]
-    df_cp_dt_life = fsmp_dataframes["cp_dt_life"]
+    df_iat_modified_total_life = fsmp_dataframes["iat_modified_total_life"].set_index("ACSN")
+    df_cp_dt_life = fsmp_dataframes["cp_dt_life"].set_index("ACSN")
     df_damagefile = db_dataframes[f"DAMGEFL{IATyear}per2"].set_index(["ACSN", "TRKPT"])
     df_iat_trkpt = db_dataframes[f"IAT_TRKPT_{FSMPyear}"].set_index("TRKPT")
     df_cp_ref = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"].set_index("CTRLPT")
@@ -143,7 +143,7 @@ def calculateCPFollowonLife(FSMPyear, db_dataframes, fsmp_dataframes):
                 df_list.append(cp_followon_life)
         df_cp_followon_life.loc[len(df_cp_followon_life)] = df_list
 
-    return df_cp_followon_life.set_index("ACSN")
+    return df_cp_followon_life
 
 '''
 Function to calculate Inspection Intervals
@@ -161,8 +161,8 @@ def calculateInspectionIntervals(FSMPyear, db_dataframes, fsmp_dataframes):
     import pandas as pd
 
     IATyear = FSMPyear - 1
-    df_cp_dt_life = fsmp_dataframes["cp_dt_life"]
-    df_cp_followon_life = fsmp_dataframes["cp_follow_on_life"]
+    df_cp_dt_life = fsmp_dataframes["cp_dt_life"].set_index("ACSN")
+    df_cp_followon_life = fsmp_dataframes["cp_follow_on_life"].set_index("ACSN")
     df_damagefile = db_dataframes[f"DAMGEFL{IATyear}per2"].set_index(["ACSN", "TRKPT"])
     df_iat_trkpt = db_dataframes[f"IAT_TRKPT_{FSMPyear}"].set_index("TRKPT")
     df_cp_ref = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"].set_index("CTRLPT")
@@ -197,7 +197,7 @@ def calculateInspectionIntervals(FSMPyear, db_dataframes, fsmp_dataframes):
                     df_list.append(inspection_interval)
         df_inspection_intervals.loc[len(df_inspection_intervals)] = df_list
 
-    return df_inspection_intervals.set_index("ACSN")
+    return df_inspection_intervals
 
 '''
 Function to calculate Hours at Next Inspection
@@ -214,7 +214,7 @@ def calculateHoursAtNextInspection(FSMPyear, db_dataframes, fsmp_dataframes):
     import pandas as pd
 
     IATyear = FSMPyear - 1
-    df_inspection_intervals = fsmp_dataframes["inspection_intervals"]
+    df_inspection_intervals = fsmp_dataframes["inspection_intervals"].set_index("ACSN")
     df_damagefile = db_dataframes[f"DAMGEFL{IATyear}per2"].set_index(["ACSN", "TRKPT"])
     df_iat_trkpt = db_dataframes[f"IAT_TRKPT_{FSMPyear}"].set_index("TRKPT")
     df_cp_ref = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"].set_index("CTRLPT")
@@ -244,7 +244,7 @@ def calculateHoursAtNextInspection(FSMPyear, db_dataframes, fsmp_dataframes):
                 df_list.append(hrs_at_next_inspection)
         df_hrs_at_next_inspection.loc[len(df_hrs_at_next_inspection)] = df_list
 
-    return df_hrs_at_next_inspection.set_index("ACSN")
+    return df_hrs_at_next_inspection
 
 '''
 Function to calculate Hours to Next Inspection
@@ -261,7 +261,7 @@ def calculateHoursToNextInspection(FSMPyear, db_dataframes, fsmp_dataframes):
     import pandas as pd
 
     IATyear = FSMPyear - 1
-    df_hrs_at_next_inspection = fsmp_dataframes["hours_at_next_inspection"]
+    df_hrs_at_next_inspection = fsmp_dataframes["hours_at_next_inspection"].set_index("ACSN")
     df_damagefile = db_dataframes[f"DAMGEFL{IATyear}per2"].set_index(["ACSN", "TRKPT"])
     df_iat_trkpt = db_dataframes[f"IAT_TRKPT_{FSMPyear}"].set_index("TRKPT")
     df_cp_ref = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"].set_index("CTRLPT")
@@ -288,4 +288,4 @@ def calculateHoursToNextInspection(FSMPyear, db_dataframes, fsmp_dataframes):
                 df_list.append(hrs_to_next_inspection)
         df_hrs_to_next_inspection.loc[len(df_hrs_to_next_inspection)] = df_list
 
-    return df_hrs_to_next_inspection.set_index("ACSN")
+    return df_hrs_to_next_inspection

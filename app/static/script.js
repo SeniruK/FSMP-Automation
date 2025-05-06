@@ -136,3 +136,15 @@ async function loadTable(tableName) {
         console.log(err);
     }
 }
+
+function saveExcel() {
+    fetch("save_excel", { method: "POST" })
+        .then(res => res.text())
+        .then(alert);
+}
+
+function saveCSV() {
+    fetch("save_csv", { method: "POST" })
+        .then(res => res.text())
+        .then(alert);
+}
