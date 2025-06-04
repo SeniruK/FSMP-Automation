@@ -7,6 +7,7 @@ import os
 import pandas as pd
 from .database import pull_table_names, get_table_data
 from .calculateFSMP import calculateIATModifiedTotalLife, calculateCPDTLife, calculateCPFollowonLife, calculateInspectionIntervals, calculateHoursAtNextInspection, calculateHoursToNextInspection
+from .compare_outputs import run_all_calculations
 
 bp = Blueprint("main", __name__)
 
@@ -35,42 +36,6 @@ def get_table():
 @bp.route("/calculate")
 def show_calculate_page():
     return render_template("calculation.html")
-
-# @bp.route("/run_calculations", methods=["POST"])
-# def run_calculations_route():
-#     global calculated_tables
-#     FSMPyear = int(session.get("FSMPyear"))
-#     if not FSMPyear:
-#         return "No FSMP year selected", 400
-
-#     table_names = session.get("table_names")
-#     if not table_names:
-#         return "No tables pulled", 400
-
-#     db_dataframes = {}
-#     for name in table_names:
-#         data = get_table_data(name, FSMPyear)
-#         df = pd.DataFrame(data)
-#         db_dataframes[name] = df
-
-        
-#     trkpt_list = db_dataframes[f"IAT_TRKPT_{FSMPyear}"]["TRKPT"].tolist()
-#     ctrlpt_list = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"]["CTRLPT"].tolist()
-#     acsn_list = db_dataframes["AC_Status_List"]["ACSN"].tolist()
-    
-#     fsmp_dataframes = {}
-#     fsmp_dataframes["IAT Modified Total Life"] = calculateIATModifiedTotalLife(FSMPyear, db_dataframes)
-#     fsmp_dataframes["CP DT Life"] = calculateCPDTLife(FSMPyear, db_dataframes, fsmp_dataframes)
-#     fsmp_dataframes["CP Follow-on Life"] = calculateCPFollowonLife(FSMPyear, db_dataframes, fsmp_dataframes)
-#     fsmp_dataframes["Inspection Intervals"] = calculateInspectionIntervals(FSMPyear, db_dataframes, fsmp_dataframes)
-#     fsmp_dataframes["Hours at Next Inspection"] = calculateHoursAtNextInspection(FSMPyear, db_dataframes, fsmp_dataframes)
-#     fsmp_dataframes["Hours to Next Inspection"] = calculateHoursToNextInspection(FSMPyear, db_dataframes, fsmp_dataframes)
-
-#     # session["fsmp_table_names"] = list(fsmp_dataframes.keys())
-#     # session["fsmp_tables"] = {name: df.to_dict(orient="records") for name, df in fsmp_dataframes.items()}
-#     calculated_tables = fsmp_dataframes
-
-#     return jsonify({"tables": list(fsmp_dataframes.keys())})
 
 @bp.route("/run_step/<calculation_step>", methods=["POST"])
 def run_step(calculation_step):
@@ -127,7 +92,7 @@ def save_excel():
     if not calculated_tables:
         return "No FSMP calculated tables found", 400
     
-    output_path = os.path.join(current_app.root_path, "downloads/Excel")
+    output_path = os.path.join(current_app.root_path, "downloads\Excel")
     os.makedirs(output_path, exist_ok=True)
 
     file_path = os.path.join(output_path, f"FSMP_Calculations_{FSMPyear}.xlsx")
@@ -147,7 +112,7 @@ def save_csv():
     if not calculated_tables:
         return "No FSMP calculated tables found", 400
     
-    output_path = os.path.join(current_app.root_path, "downloads/CSV")
+    output_path = os.path.join(current_app.root_path, "downloads\CSV")
     os.makedirs(output_path, exist_ok=True)
 
     for name, df in calculated_tables.items():
@@ -156,3 +121,34 @@ def save_csv():
         df.to_csv(file_path, index=False)
     
     return f"Saved CSVs to {file_path}", 200
+
+@bp.route("/download_comparison_excel", methods=["POST"])
+def download_comparison_excel():
+    global calculated_tables
+
+    FSMPyear = int(session.get("FSMPyear"))
+    prevFSMPyear = FSMPyear - 1
+    table_names = session.get("table_names")
+
+    if not FSMPyear or not prevFSMPyear or not table_names:
+        return jsonify({"error": "Missing FSMP year or table names"}), 400
+    
+    current_year_results = run_all_calculations(FSMPyear, table_names)
+    previous_year_results = run_all_calculations(prevFSMPyear, table_names)
+
+    df_current = current_year_results.get("hours_at_next_inspection")
+    df_previous = previous_year_results.get("hours_at_next_inspection")
+
+    if df_current is None or df_previous is None:
+        return jsonify({"error": "Missing calculated data for comparison"}), 500
+
+    downloads_dir = os.path.join(os.get.getcwd(), "downloads/COMPARE")
+    os.makedirs(downloads_dir, exist_ok=True)
+
+    filename = f"COMPARE_{FSMPyear}vs{prevFSMPyear}.xlsx"
+    filepath = os.path.join(downloads_dir, filename)
+
+    compareOutputs(df_current, df_previous, filename)
+
+    return jsonify({"message": f"Comparison Excel workbook saved to downloads folder as {filename}."})
+    

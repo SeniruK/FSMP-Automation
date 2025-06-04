@@ -148,3 +148,18 @@ function saveCSV() {
         .then(res => res.text())
         .then(alert);
 }
+
+function downloadComparisonExcel() {
+    fetch("/download_comparison_excel", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" }
+    })
+    .then(res => res.json)
+    .then(data => {
+        alert(data.message);
+    })
+    .catch(err => {
+        alert("Comparison failed.");
+        console.error(err)
+    })
+}
