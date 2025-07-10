@@ -15,7 +15,7 @@ calculated_tables = {}
 
 @bp.route("/")
 def index():
-    return render_template("index.html", years=[2024, 2023, 2022, 2021, 2020])
+    return render_template("index.html", years=[2025, 2024, 2023, 2022, 2021, 2020])
 
 @bp.route("/pull_tables", methods=["POST"])
 def pull_tables():

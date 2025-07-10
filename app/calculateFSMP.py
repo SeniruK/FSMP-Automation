@@ -20,10 +20,10 @@ def calculateIATModifiedTotalLife(FSMPyear, db_dataframes, fsmp_dataframes):
     df_damagefile = db_dataframes[f"DAMGEFL{IATyear}per2"].set_index(["ACSN", "TRKPT"])
     df_iat_trkpt = db_dataframes[f"IAT_TRKPT_{FSMPyear}"].set_index("TRKPT")
     df_scale_factors = db_dataframes["Normalized_Scale_Factors"].set_index("TRKPT")
-    df_cp_ref = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"].set_index("CTRLPT")
+    df_cp_ref = db_dataframes[f"CP_Ref_Table_{FSMPyear}"].set_index("CTRLPT")
     
     trkpt_list = db_dataframes[f"IAT_TRKPT_{FSMPyear}"]["TRKPT"].tolist()
-    ctrlpt_list = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"]["CTRLPT"].tolist()
+    ctrlpt_list = db_dataframes[f"CP_Ref_Table_{FSMPyear}"]["CTRLPT"].tolist()
     acsn_list = db_dataframes["AC_Status_List"]["ACSN"].tolist()
     ctrlpt_dict = {'W15LH': 'W-15', 'W1LH': 'W-1', 'W15RH': 'W-15', 'W1RH': 'W-1', 'WCT4': 'WCT-4', 'WCT10': 'WCT-10', 'WSAFLH': 'WSA-6 LH', 'WSAFRH': 'WSA-6 RH', 'FIF6': 'FIF-6L', 'AIF9': 'AIF-9', 'AIF12': 'AIF-12', 'AIF51': 'AIF-51', 'HS1LLH': 'HS-1LL', 'HS1ULH': 'HS-1UL', 'HS1LRH': 'HS-1LR', 'HS1URH': 'HS-1UR', 'VS2LH': 'VS-2', 'AF1LH': 'AF-1', 'NAC6LH': 'NAC-6', 'NAC4LH': 'NAC-4', 'NAC6RH': 'NAC-6', 'NAC4RH': 'NAC-4', 'AF1RH': 'AF-1', 'VS2RH': 'VS-2', 'MLG1': 'MLG-01', 'MLG2': 'MLG-02', 'MLG3': 'MLG-03'}
     col_list = ["ACSN"] + trkpt_list
@@ -67,9 +67,9 @@ def calculateCPDTLife(FSMPyear, db_dataframes, fsmp_dataframes):
     df_iat_modified_total_life = fsmp_dataframes["iat_modified_total_life"].set_index("ACSN")
     df_damagefile = db_dataframes[f"DAMGEFL{IATyear}per2"].set_index(["ACSN", "TRKPT"])
     df_iat_trkpt = db_dataframes[f"IAT_TRKPT_{FSMPyear}"].set_index("TRKPT")
-    df_cp_ref = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"].set_index("CTRLPT")
+    df_cp_ref = db_dataframes[f"CP_Ref_Table_{FSMPyear}"].set_index("CTRLPT")
     
-    ctrlpt_list = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"]["CTRLPT"].tolist()
+    ctrlpt_list = db_dataframes[f"CP_Ref_Table_{FSMPyear}"]["CTRLPT"].tolist()
     acsn_list = db_dataframes["AC_Status_List"]["ACSN"].tolist()
     ctrlpt_dict = {'W15LH': 'W-15', 'W1LH': 'W-1', 'W15RH': 'W-15', 'W1RH': 'W-1', 'WCT4': 'WCT-4', 'WCT10': 'WCT-10', 'WSAFLH': 'WSA-6 LH', 'WSAFRH': 'WSA-6 RH', 'FIF6': 'FIF-6L', 'AIF9': 'AIF-9', 'AIF12': 'AIF-12', 'AIF51': 'AIF-51', 'HS1LLH': 'HS-1LL', 'HS1ULH': 'HS-1UL', 'HS1LRH': 'HS-1LR', 'HS1URH': 'HS-1UR', 'VS2LH': 'VS-2', 'AF1LH': 'AF-1', 'NAC6LH': 'NAC-6', 'NAC4LH': 'NAC-4', 'NAC6RH': 'NAC-6', 'NAC4RH': 'NAC-4', 'AF1RH': 'AF-1', 'VS2RH': 'VS-2', 'MLG1': 'MLG-01', 'MLG2': 'MLG-02', 'MLG3': 'MLG-03'}
     col_list = ["ACSN"] + ctrlpt_list
@@ -115,10 +115,10 @@ def calculateCPFollowonLife(FSMPyear, db_dataframes, fsmp_dataframes):
     df_cp_dt_life = fsmp_dataframes["cp_dt_life"].set_index("ACSN")
     df_damagefile = db_dataframes[f"DAMGEFL{IATyear}per2"].set_index(["ACSN", "TRKPT"])
     df_iat_trkpt = db_dataframes[f"IAT_TRKPT_{FSMPyear}"].set_index("TRKPT")
-    df_cp_ref = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"].set_index("CTRLPT")
+    df_cp_ref = db_dataframes[f"CP_Ref_Table_{FSMPyear}"].set_index("CTRLPT")
     df_special_inspections = db_dataframes[f"Special_Inspections_{FSMPyear}"].set_index("ACSN")
     
-    ctrlpt_list = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"]["CTRLPT"].tolist()
+    ctrlpt_list = db_dataframes[f"CP_Ref_Table_{FSMPyear}"]["CTRLPT"].tolist()
     acsn_list = db_dataframes["AC_Status_List"]["ACSN"].tolist()
     ctrlpt_dict = {'W15LH': 'W-15', 'W1LH': 'W-1', 'W15RH': 'W-15', 'W1RH': 'W-1', 'WCT4': 'WCT-4', 'WCT10': 'WCT-10', 'WSAFLH': 'WSA-6 LH', 'WSAFRH': 'WSA-6 RH', 'FIF6': 'FIF-6L', 'AIF9': 'AIF-9', 'AIF12': 'AIF-12', 'AIF51': 'AIF-51', 'HS1LLH': 'HS-1LL', 'HS1ULH': 'HS-1UL', 'HS1LRH': 'HS-1LR', 'HS1URH': 'HS-1UR', 'VS2LH': 'VS-2', 'AF1LH': 'AF-1', 'NAC6LH': 'NAC-6', 'NAC4LH': 'NAC-4', 'NAC6RH': 'NAC-6', 'NAC4RH': 'NAC-4', 'AF1RH': 'AF-1', 'VS2RH': 'VS-2', 'MLG1': 'MLG-01', 'MLG2': 'MLG-02', 'MLG3': 'MLG-03'}
     col_list = ["ACSN"] + ctrlpt_list
@@ -165,10 +165,10 @@ def calculateInspectionIntervals(FSMPyear, db_dataframes, fsmp_dataframes):
     df_cp_followon_life = fsmp_dataframes["cp_follow_on_life"].set_index("ACSN")
     df_damagefile = db_dataframes[f"DAMGEFL{IATyear}per2"].set_index(["ACSN", "TRKPT"])
     df_iat_trkpt = db_dataframes[f"IAT_TRKPT_{FSMPyear}"].set_index("TRKPT")
-    df_cp_ref = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"].set_index("CTRLPT")
+    df_cp_ref = db_dataframes[f"CP_Ref_Table_{FSMPyear}"].set_index("CTRLPT")
     df_inspection_table = db_dataframes[f"Inspection_Table_{FSMPyear}"].set_index(["ACSN", "CTRLPT"])
     
-    ctrlpt_list = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"]["CTRLPT"].tolist()
+    ctrlpt_list = db_dataframes[f"CP_Ref_Table_{FSMPyear}"]["CTRLPT"].tolist()
     acsn_list = db_dataframes["AC_Status_List"]["ACSN"].tolist()
     ctrlpt_dict = {'W15LH': 'W-15', 'W1LH': 'W-1', 'W15RH': 'W-15', 'W1RH': 'W-1', 'WCT4': 'WCT-4', 'WCT10': 'WCT-10', 'WSAFLH': 'WSA-6 LH', 'WSAFRH': 'WSA-6 RH', 'FIF6': 'FIF-6L', 'AIF9': 'AIF-9', 'AIF12': 'AIF-12', 'AIF51': 'AIF-51', 'HS1LLH': 'HS-1LL', 'HS1ULH': 'HS-1UL', 'HS1LRH': 'HS-1LR', 'HS1URH': 'HS-1UR', 'VS2LH': 'VS-2', 'AF1LH': 'AF-1', 'NAC6LH': 'NAC-6', 'NAC4LH': 'NAC-4', 'NAC6RH': 'NAC-6', 'NAC4RH': 'NAC-4', 'AF1RH': 'AF-1', 'VS2RH': 'VS-2', 'MLG1': 'MLG-01', 'MLG2': 'MLG-02', 'MLG3': 'MLG-03'}
     col_list = ["ACSN"] + ctrlpt_list
@@ -217,10 +217,10 @@ def calculateHoursAtNextInspection(FSMPyear, db_dataframes, fsmp_dataframes):
     df_inspection_intervals = fsmp_dataframes["inspection_intervals"].set_index("ACSN")
     df_damagefile = db_dataframes[f"DAMGEFL{IATyear}per2"].set_index(["ACSN", "TRKPT"])
     df_iat_trkpt = db_dataframes[f"IAT_TRKPT_{FSMPyear}"].set_index("TRKPT")
-    df_cp_ref = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"].set_index("CTRLPT")
+    df_cp_ref = db_dataframes[f"CP_Ref_Table_{FSMPyear}"].set_index("CTRLPT")
     df_inspection_table = db_dataframes[f"Inspection_Table_{FSMPyear}"].set_index(["ACSN", "CTRLPT"])
     
-    ctrlpt_list = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"]["CTRLPT"].tolist()
+    ctrlpt_list = db_dataframes[f"CP_Ref_Table_{FSMPyear}"]["CTRLPT"].tolist()
     acsn_list = db_dataframes["AC_Status_List"]["ACSN"].tolist()
     ctrlpt_dict = {'W15LH': 'W-15', 'W1LH': 'W-1', 'W15RH': 'W-15', 'W1RH': 'W-1', 'WCT4': 'WCT-4', 'WCT10': 'WCT-10', 'WSAFLH': 'WSA-6 LH', 'WSAFRH': 'WSA-6 RH', 'FIF6': 'FIF-6L', 'AIF9': 'AIF-9', 'AIF12': 'AIF-12', 'AIF51': 'AIF-51', 'HS1LLH': 'HS-1LL', 'HS1ULH': 'HS-1UL', 'HS1LRH': 'HS-1LR', 'HS1URH': 'HS-1UR', 'VS2LH': 'VS-2', 'AF1LH': 'AF-1', 'NAC6LH': 'NAC-6', 'NAC4LH': 'NAC-4', 'NAC6RH': 'NAC-6', 'NAC4RH': 'NAC-4', 'AF1RH': 'AF-1', 'VS2RH': 'VS-2', 'MLG1': 'MLG-01', 'MLG2': 'MLG-02', 'MLG3': 'MLG-03'}
     col_list = ["ACSN"] + ctrlpt_list
@@ -264,9 +264,9 @@ def calculateHoursToNextInspection(FSMPyear, db_dataframes, fsmp_dataframes):
     df_hrs_at_next_inspection = fsmp_dataframes["hours_at_next_inspection"].set_index("ACSN")
     df_damagefile = db_dataframes[f"DAMGEFL{IATyear}per2"].set_index(["ACSN", "TRKPT"])
     df_iat_trkpt = db_dataframes[f"IAT_TRKPT_{FSMPyear}"].set_index("TRKPT")
-    df_cp_ref = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"].set_index("CTRLPT")
+    df_cp_ref = db_dataframes[f"CP_Ref_Table_{FSMPyear}"].set_index("CTRLPT")
     
-    ctrlpt_list = db_dataframes[f"CP_Ref_Table5_Special_{FSMPyear}"]["CTRLPT"].tolist()
+    ctrlpt_list = db_dataframes[f"CP_Ref_Table_{FSMPyear}"]["CTRLPT"].tolist()
     acsn_list = db_dataframes["AC_Status_List"]["ACSN"].tolist()
     ctrlpt_dict = {'W15LH': 'W-15', 'W1LH': 'W-1', 'W15RH': 'W-15', 'W1RH': 'W-1', 'WCT4': 'WCT-4', 'WCT10': 'WCT-10', 'WSAFLH': 'WSA-6 LH', 'WSAFRH': 'WSA-6 RH', 'FIF6': 'FIF-6L', 'AIF9': 'AIF-9', 'AIF12': 'AIF-12', 'AIF51': 'AIF-51', 'HS1LLH': 'HS-1LL', 'HS1ULH': 'HS-1UL', 'HS1LRH': 'HS-1LR', 'HS1URH': 'HS-1UR', 'VS2LH': 'VS-2', 'AF1LH': 'AF-1', 'NAC6LH': 'NAC-6', 'NAC4LH': 'NAC-4', 'NAC6RH': 'NAC-6', 'NAC4RH': 'NAC-4', 'AF1RH': 'AF-1', 'VS2RH': 'VS-2', 'MLG1': 'MLG-01', 'MLG2': 'MLG-02', 'MLG3': 'MLG-03'}
     col_list = ["ACSN"] + ctrlpt_list
