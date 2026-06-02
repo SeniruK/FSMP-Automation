@@ -16,4 +16,5 @@ You will need the following applications/libraries installed to use the FMSP Aut
 To run this tool:
 1. Run the main.py function
 2. Select the year you wish to analyze
-3. Click "Run FSMP Automation"
+3. Click "Next"
+4. Click "Run FSMP Calculations"
