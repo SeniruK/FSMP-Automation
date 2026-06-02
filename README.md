@@ -11,3 +11,9 @@ You will need the following applications/libraries installed to use the FMSP Aut
 * Microsoft Access 2013 or later
 * Flask
 * Pandas
+
+## How to use
+To run this tool:
+1. Run the main.py function
+2. Select the year you wish to analyze
+3. Click "Run FSMP Automation"
